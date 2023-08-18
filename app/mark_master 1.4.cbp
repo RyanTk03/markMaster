@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="mark_master 1.0" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="mark_master" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="D:/Made By Rayane/C/mark_master/mark_master-1.4" />
+				<Option object_output="D:/Made By Rayane/C/mark_master/mark_master-1.4" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/mark_master 1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="C:/Program Files/CodeBlocks/SDL-2x/SDL2-2.0.14/x86_64-w64-mingw32/include" />
+		</Compiler>
+		<Linker>
+			<Add library="mingw32" />
+			<Add library="SDL2main" />
+			<Add library="SDL2.dll" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add library="C:/Program Files/CodeBlocks/SDL-2x/SDL2_image-2.0.5/x86_64-w64-mingw32/lib/libSDL2_image.dll.a" />
+			<Add library="C:/Program Files/CodeBlocks/SDL-2x/SDL2_ttf-2.0.15/x86_64-w64-mingw32/lib/libSDL2_ttf.dll.a" />
+			<Add library="C:/Program Files/CodeBlocks/SDL-2x/SDL2-2.0.14/x86_64-w64-mingw32/lib/libSDL2.a" />
+			<Add directory="C:/Program Files/CodeBlocks/SDL-2x/SDL2-2.0.14/x86_64-w64-mingw32/lib" />
+		</Linker>
+		<ExtraCommands>
+			<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
+		</ExtraCommands>
+		<Unit filename="IMG/entete.bmp" />
+		<Unit filename="IMG/fondIMG.bmp" />
+		<Unit filename="IMG/icon.ico" />
+		<Unit filename="IMG/ligne.bmp" />
+		<Unit filename="inc/BTN_.h" />
+		<Unit filename="inc/KeyDown.h" />
+		<Unit filename="inc/ajouter.h" />
+		<Unit filename="inc/charge.h" />
+		<Unit filename="inc/constantes.h" />
+		<Unit filename="inc/evenement.h" />
+		<Unit filename="inc/fenetres.h" />
+		<Unit filename="inc/klcul_moy.h" />
+		<Unit filename="inc/lireNote.h" />
+		<Unit filename="inc/sauvegarde.h" />
+		<Unit filename="inc/variables.h" />
+		<Unit filename="rc/ressources.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="src/BTN_.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/KeyDown.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ajouter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/charge.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/evenement.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/fenetres.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klcul_moy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/lireNote.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/sauvegarde.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/variables.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
