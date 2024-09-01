@@ -1,4 +1,4 @@
-# markMaster
+# Mark Master
 markMaster is a program designed to automate the calculation of averages, simplifying grade management. This project was developed to address a personal challenge and make the grading process more efficient.
 ![screenshot](screenshots/6.png)
 
