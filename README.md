@@ -1,5 +1,6 @@
 # markMaster
 markMaster is a program designed to automate the calculation of averages, simplifying grade management. This project was developed to address a personal challenge and make the grading process more efficient.
+![screenshot](screenshots/6.png)
 
 ## Table of Contents
 - [overview](#overview)
@@ -18,9 +19,10 @@ git clone https://github.com/votre-utilisateur/markMaster.git
 ```
 2. Navigate to the project directory:
 ```bash
-cd markMaster
+cd markMaster/app
 ```
-3. Compile the program:
+3. Compile/execute the program:
+An executable is available for window juste execute it 😀. If you want to recompile:
 ```bash
 gcc -o markMaster main.c
 ```
@@ -30,9 +32,12 @@ To run the program, use the following command:
 ```bash
 ./markMaster
 ```
-Follow the on-screen instructions to enter grades and get averages.
-
-## Examples
+![screenshot](screenshots/1.jpg)
+![screenshot](screenshots/2.jpg)
+![screenshot](screenshots/3.jpg)
+![screenshot](screenshots/4.jpg)
+![screenshot](screenshots/5.jpg)
+![screenshot](screenshots/6.png)
 
 ## Note
 This project represents my learning journey in programming. I decided to create this tool to automate a task that I found tedious, and this experience allowed me to develop my programming skills and learn how to solve problems creatively. At the time, the calculation of class averages was manual, which could waste a little time. Why don't I use excel 😮? First of all because I didn't 😅 know it, and in addition, for me it was a challenge and it was more fun 😀.
