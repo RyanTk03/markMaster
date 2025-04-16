@@ -1,6 +1,8 @@
 #ifndef AJOUTER_H_INCLUDED
 #define AJOUTER_H_INCLUDED
 
+#include "variables.h"
+
 Fiche* AjouterFiche(Liste_f *fiches, SDL_Renderer *render);
 Return_Bool AjouterMatiere(Fiche *fiche);
 Return_Bool AjouterNote(Matiere *matiere, double note, int position, SDL_Renderer *render);

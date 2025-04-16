@@ -5,16 +5,15 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-typedef enum Return_Bool Return_Bool;
-enum Return_Bool
+typedef enum Return_Bool
 {
     quit_window = -1, error = 0, ok = 1
-};
+} Return_Bool;
 
-SDL_Rect ligneActuelle;
-SDL_DisplayMode resolution;
-TTF_Font *myFont;
-SDL_Color noire;
+static SDL_Rect ligneActuelle;
+static SDL_DisplayMode resolution;
+static TTF_Font *myFont;
+static SDL_Color noire;
 
 //La fenêtre principale
 #define DECLARE_FONT() myFont = TTF_OpenFont("appData/fonts/taile.ttf", 18)

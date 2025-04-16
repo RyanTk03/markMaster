@@ -13,6 +13,7 @@
 #include "../inc/ajouter.h"
 #include "../inc/fenetres.h"
 #include "../inc/lireNote.h"
+#include "../inc/charge.h"
 
 void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, SDL_Renderer *render, char **argv)
 {
@@ -20,7 +21,7 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
     SDL_Event ficheEvent;
     int continuer = 1;
     int m = 0, f = 0;
-    Fiche *ficheActel = NULL;
+    Fiche* ficheActel = NULL;
     FILE *lastRoot = fopen("appData/lastR.jpfdat", "rb");
     if(lastRoot == NULL)
     {
@@ -38,7 +39,7 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
             fscanf(lastRoot, "%s", lastFiche);
             if(lastFiche != NULL)
             {
-                ficheActel = charger_fiche(listFiche, render, lastFiche);
+                ficheActel = charger_fiche(listFiche, render, "test");
                 f++;
             }
         }

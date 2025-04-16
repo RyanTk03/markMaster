@@ -32,11 +32,10 @@ struct Bilan
     char *mention;
 };
 
-typedef enum TypeNote TypeNote;
-enum TypeNote
+typedef enum TypeNote
 {
     devoir, interrogation
-};
+} TypeNote;
 
 typedef struct Liste_n Liste_n;
 struct Liste_n
@@ -81,11 +80,10 @@ struct Volet
     BTN_Button *supp;
 };
 
-typedef enum StatutFiche StatutFiche;
-enum StatutFiche
+typedef enum StatutFiche
 {
     actuelle, arriere_plan
-};
+} StatutFiche;
 
 typedef struct Fiche Fiche;
 struct Fiche

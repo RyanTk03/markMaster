@@ -6,15 +6,7 @@
 
 #include "../inc/constantes.h"
 #include "../inc/variables.h"
-#include "../inc/ajouter.h"
-#include "../inc/BTN_.h"
-#include "../inc/charge.h"
 #include "../inc/evenement.h"
-#include "../inc/fenetres.h"
-#include "../inc/KeyDown.h"
-#include "../inc/klcul_moy.h"
-#include "../inc/lireNote.h"
-#include "../inc/sauvegarde.h"
 
 int main(int argc, char **argv)
 {
