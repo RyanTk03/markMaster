@@ -12,7 +12,7 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) -g -o $@ $^ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

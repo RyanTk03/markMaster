@@ -10,10 +10,10 @@ typedef enum Return_Bool
     quit_window = -1, error = 0, ok = 1
 } Return_Bool;
 
-static SDL_Rect ligneActuelle;
-static SDL_DisplayMode resolution;
-static TTF_Font *myFont;
-static SDL_Color noire;
+extern SDL_Rect ligneActuelle;
+extern SDL_DisplayMode resolution;
+extern TTF_Font *myFont;
+extern SDL_Color noire;
 
 //La fenêtre principale
 #define DECLARE_FONT() myFont = TTF_OpenFont("appData/fonts/taile.ttf", 18)

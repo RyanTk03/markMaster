@@ -10,7 +10,7 @@ Fiche *CreerFiche()//Fini(sauf le volet)
 
     if(fiche == NULL)
     {
-        fprintf(stdout,"Impossible de creer une nouvelle fiche");
+        fprintf(stderr,"Impossible de creer une nouvelle fiche");
         return NULL;
     }
     fiche->nom = NULL;
@@ -85,22 +85,13 @@ Fiche* DetruireFiche(Liste_f *fiches, Fiche *fiche)
         i++;
     }
     fiches->n--;
-    printf("Entrer :: DetruireFiche()\n");
-    printf("1 :: DetruireFiche()\n");
     BTN_FreeButton(fiche->bouton_plus);
-    printf("2 :: DetruireFiche()\n");
     SupprimerVolet(fiches, fiche);
-    printf("3 :: DetruireFiche()\n");
     LibererGraphe(fiche->graphe);
-    printf("4 :: DetruireFiche()\n");
     SupprimerListeMatiere(fiche->list_matiere, fiche);
-    printf("5 :: DetruireFiche()\n");
     free(fiche->nom);
-    printf("6 :: DetruireFiche()\n");
     SDL_DestroyTexture(fiche->texture);
-    printf("7 :: DetruireFiche()\n");
     SET_GREY(fiche->render);
-    printf("8 :: DetruireFiche()\n");
     SDL_RenderFillRect(fiche->render, &fiche->surface_rect);
     free(fiche);
     if(ficheActuelle != NULL)
@@ -139,9 +130,9 @@ Matiere* CreerMatiere(Fiche *fiche, char *nom, double coefficient)//Fini
     if(coefficient == 0 || nom == NULL)
     {
         if(coefficient == 0)
-            fprintf(stdout, "le coefficient envoye a la fonction CreerMatiere() null\n");
+            fprintf(stderr, "le coefficient envoye a la fonction CreerMatiere() null\n");
         else
-            fprintf(stdout, "le nom envoye a la fonction CreerMatiere() n'existe pas en memoire\n");
+            fprintf(stderr, "le nom envoye a la fonction CreerMatiere() n'existe pas en memoire\n");
         return NULL;
     }
     Matiere *newMatiere = malloc(sizeof(*newMatiere));
@@ -157,8 +148,6 @@ Matiere* CreerMatiere(Fiche *fiche, char *nom, double coefficient)//Fini
     newMatiere->indice = fiche->list_matiere->n-1;
     newMatiere->ligne = texture;
     newMatiere->appreciation = NULL;
-    printf("%.2f\n", newMatiere->coefficient);
-    printf("sortie de la fonction CreerMatiere()\n");
 
     return newMatiere;
 }
@@ -218,7 +207,7 @@ Volet *Creer_AfficherVolet(Liste_f *fiches)//il reste à régler le nom
 
     if(volet == NULL)
     {
-        fprintf(stdout, "Impossible de creer le volet de navigation");
+        fprintf(stderr, "Impossible de creer le volet de navigation");
         return NULL;
     }
     volet->texture = SDL_CreateTexture(fiches->addrFiche[fiches->n]->render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -265,7 +254,6 @@ Volet *Creer_AfficherVolet(Liste_f *fiches)//il reste à régler le nom
     SDL_SetRenderTarget(fiches->addrFiche[fiches->n]->render, NULL);
     volet->supp = BTN_CreateButtonWithTexture(BTN_DYNAMIC_BUTTON_FORM_A, SUPP_FICHE_W, SUPP_FICHE_H,
                   NAVIG_VOLET_X+(VOLET_W+(fiches->n*VOLET_W))-SUPP_FICHE_W, NAVIG_VOLET_Y, "x", "appData/fonts/taile.ttf");
-    printf("fin\n");
     BTN_ChangeEffectColor(volet->supp, 200, 0, 0, 80, fiches->addrFiche[fiches->n]->render);
     BTN_CopyButton(volet->supp, fiches->addrFiche[fiches->n]->render);
     SDL_RenderCopy(fiches->addrFiche[fiches->n]->render, volet->texture, NULL, volet->rectangle);
@@ -309,15 +297,10 @@ Return_Bool mouseMoveInVolet(Fiche *fiche, SDL_Event event)
 
 void SupprimerVolet(Liste_f *fiches, Fiche *fiche)
 {
-    printf("Entrer :: SupprimerVolet()\n");
     SET_GREY(fiche->render);
-    printf("1 :: SupprimerVolet()\n");
     SDL_RenderFillRect(fiche->render, fiche->volet_titre->rectangle);
-    printf("2 :: SupprimerVolet()\n");
     SDL_RenderFillRect(fiche->render, fiche->volet_titre->supp->rect);
-    printf("3 :: SupprimerVolet()\n");
     SDL_free(fiche->volet_titre->rectangle);
-    printf("4 :: SupprimerVolet()\n");
     BTN_FreeButton(fiche->volet_titre->supp);
     int i = 0;
     for(i = 0; i < fiches->n; i++)
@@ -357,7 +340,7 @@ BoiteOutils *CreerOutils()
     BoiteOutils *outils = malloc(sizeof(*outils));
     if(outils == NULL)
     {
-        fprintf(stdout, "Impossible de créer la barre des outils");
+        fprintf(stderr, "Impossible de créer la barre des outils");
         return NULL;
     }
     outils->addFiche = BTN_CreateButtonWithTexture(BTN_STATIC_BUTTON, LITLE_BUTTON_W, LITLE_BUTTON_H, OUTILS_X, OUTILS_Y, "+Fiche", "appData/fonts/taile.ttf");
@@ -409,7 +392,7 @@ Graphe* CreerGraphe(void)
     NotePoint *element = malloc(sizeof(*element));
     if(graphe == NULL || element == NULL)
     {
-        fprintf(stdout, "Impossible de creer le graphe :: CreerGraphe()");
+        fprintf(stderr, "Impossible de creer le graphe :: CreerGraphe()");
         return NULL;
     }
     element->indice = -1;

@@ -12,7 +12,7 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
     BTN_Button *bouton = malloc(sizeof(*bouton));
     if(bouton == NULL)
     {
-        fprintf(stdout, "Impossible de creer le bouton :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "Impossible de creer le bouton :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     bouton->fontColor.r = 0;
@@ -23,12 +23,11 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
     /*police du bouton*/
     if(font == NULL)
     {
-        fprintf(stdout, "La police n'a pas été donne :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "La police n'a pas été donne :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     else
     {
-        printf("fin\n");
         bouton->fontName = malloc((strlen(font)+1)*sizeof(char));
         for(i = 0; i < strlen(font); i++)
             bouton->fontName[i] = font[i];
@@ -36,7 +35,7 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
         bouton->font = TTF_OpenFont(bouton->fontName, 12);
         if(bouton->font == NULL)
         {
-            printf("%s :: BTN_CreateButtonWithTexture()\n", TTF_GetError());
+            fprintf(stderr, "%s :: BTN_CreateButtonWithTexture()\n", TTF_GetError());
             return NULL;
         }
     }
@@ -44,25 +43,24 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
     /*nom du bouton*/
     if(name == NULL)
     {
-        fprintf(stdout, "Le nom n'a pas ete retrouver :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "Le nom n'a pas ete retrouver :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     bouton->name = malloc((strlen(name)+1)*sizeof(char));
     for(i = 0; i < strlen(name); i++)
         bouton->name[i] = name[i];
     bouton->name[i] = '\0';
-    printf("fin\n");
     bouton->nameSurface = TTF_RenderText_Blended(bouton->font, bouton->name, bouton->fontColor);
     if(bouton->nameSurface == NULL)
     {
-        fprintf(stdout, "Les surfaces du bouton n'ont pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "Les surfaces du bouton n'ont pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     //Maintenant le rectangle qui contient le bouton:
     bouton->rect = SDL_malloc(sizeof(*bouton->rect));
     if(bouton->rect == NULL)
     {
-        fprintf(stdout, "Le rectangle du bouton n'a pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "Le rectangle du bouton n'a pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     bouton->rect->x = x;
@@ -80,7 +78,7 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
     bouton->nameRect = SDL_malloc(sizeof(*bouton->nameRect));
     if(bouton->nameRect == NULL)
     {
-        fprintf(stdout, "Le rectangle du nom n'a pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
+        fprintf(stderr, "Le rectangle du nom n'a pas pu etre creer :: BTN_CreateButtonWithTexture().\n");
         return NULL;
     }
     if(bouton->nameSurface->w > bouton->rect->w)
@@ -102,7 +100,7 @@ BTN_Button *BTN_CreateButtonWithTexture(Uint8 type, int w, int h, int x, int y, 
     bouton->effectColor.a = 128;
     //Le type
     bouton->type = type;
-
+    bouton->texture = NULL;
     return bouton;
 }
 
@@ -113,14 +111,14 @@ SDL_Rect *BTN_CopyButton(BTN_Button *button, SDL_Renderer *renderer)
     button->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, button->rect->w, button->rect->h);
     if(button->texture == NULL)
     {
-        fprintf(stdout, "BTN_CopyButton: can't create texture\n");
+        fprintf(stderr, "BTN_CopyButton: can't create texture\n");
         return NULL;
     }
     SDL_SetTextureBlendMode(button->texture, SDL_BLENDMODE_BLEND);
     button->surface = SDL_CreateRGBSurface(SDL_SWSURFACE, button->rect->w, button->rect->h, 32, 0, 0, 0, 0);
     if(button->surface == NULL)
     {
-        fprintf(stdout, "BTN_CopyButton: can't create surface\n");
+        fprintf(stderr, "BTN_CopyButton: can't create surface\n");
         return NULL;
     }
     SDL_SetSurfaceBlendMode(button->surface, SDL_BLENDMODE_BLEND);
@@ -129,17 +127,16 @@ SDL_Rect *BTN_CopyButton(BTN_Button *button, SDL_Renderer *renderer)
     SDL_BlitSurface(button->nameSurface, NULL, button->surface, button->nameRect);
     t = SDL_CreateTextureFromSurface(renderer, button->surface);
     SDL_FreeSurface(button->surface);
-    SDL_free(button->surface);
     SDL_SetRenderTarget(renderer, button->texture);
     SDL_RenderCopy(renderer, t, NULL, NULL);
     if(SDL_SetRenderDrawColor(renderer, button->effectColor.r, button->effectColor.g, button->effectColor.b, button->effectColor.a) < 0)
     {
-        fprintf(stdout, "BTN_CopyButton: can't draw rectangle color\n");
+        fprintf(stderr, "BTN_CopyButton: can't draw rectangle color\n");
         return NULL;
     }
     if (SDL_RenderDrawRect(renderer, NULL) < 0)
     {
-        fprintf(stdout, "BTN_CopyButton: can't draw rectangle\n");
+        fprintf(stderr, "BTN_CopyButton: can't draw rectangle\n");
         return NULL;
     }
     SDL_SetRenderTarget(renderer, target);
@@ -155,49 +152,48 @@ void BTN_FreeButton(BTN_Button *button)
     {
         if(button->surface != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation de la surface\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation de la surface\n");
             if(button->texture == NULL)
-                SDL_FreeSurface(button->surface);
+                    SDL_FreeSurface(button->surface);
         }
         if(button->texture != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation de la texture\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation de la texture\n");
             SDL_DestroyTexture(button->texture);
         }
         if(button->nameSurface != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation de la surface du nom\n");
-            if(button->texture == NULL)
-                SDL_FreeSurface(button->nameSurface);
+            fprintf(stderr, "BTN_FreeButton(): liberation de la surface du nom\n");
+            SDL_FreeSurface(button->nameSurface);
         }
         if(button->font != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation de la police\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation de la police\n");
             TTF_CloseFont(button->font);
         }
         if(button->name != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation du nom\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation du nom\n");
             free(button->name);
         }
         if(button->fontName != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation du nom de la police utilisee\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation du nom de la police utilisee\n");
             free(button->fontName);
         }
         if(button->nameRect != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation du rectangle du nom\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation du rectangle du nom\n");
             SDL_free(button->nameRect);
         }
         if(button->rect != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation du rectangle de la surface\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation du rectangle de la surface\n");
             SDL_free(button->rect);
         }
         if(button != NULL)
         {
-            fprintf(stdout, "BTN_FreeButton(): liberation de la memoire alloue pour le bouton\n");
+            fprintf(stderr, "BTN_FreeButton(): liberation de la memoire alloue pour le bouton\n");
             free(button);
         }
     }
@@ -209,7 +205,7 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
     BTN_Button *bouton = malloc(sizeof(*bouton));
     if(bouton == NULL)
     {
-        fprintf(stdout, "Impossible de creer le bouton :: BTN_CreateButtonWithSurface().\n");
+        fprintf(stderr, "Impossible de creer le bouton :: BTN_CreateButtonWithSurface().\n");
         return NULL;
     }
     bouton->fontColor.r = 0;
@@ -219,7 +215,7 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
     /*police du bouton*/
     if(font == NULL)
     {
-        fprintf(stdout, "La police du bouton n'a pas ete trouver :: BTN_CreateButtonWithSurface().\n");
+        fprintf(stderr, "La police du bouton n'a pas ete trouver :: BTN_CreateButtonWithSurface().\n");
         return NULL;
     }
     else
@@ -231,14 +227,14 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
         bouton->font = TTF_OpenFont(bouton->fontName, 10);
         if(bouton->font == NULL)
         {
-            fprintf(stdout, "La police du bouton n'a pas pu etre cree :: BTN_CreateButtonWithSurface().r\n");
+            fprintf(stderr, "La police du bouton n'a pas pu etre cree :: BTN_CreateButtonWithSurface().r\n");
             return NULL;
         }
     }
     /*nom du bouton*/
     if(name == NULL)
     {
-        fprintf(stdout, "Le nom du bouton n'a pas ete trouver :: BTN_CreateButtonWithSurface().\n");
+        fprintf(stderr, "Le nom du bouton n'a pas ete trouver :: BTN_CreateButtonWithSurface().\n");
         return NULL;
     }
     bouton->name = malloc((strlen(name)+1)*sizeof(char));
@@ -250,7 +246,7 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
     SDL_SetSurfaceBlendMode(bouton->surface, SDL_BLENDMODE_BLEND);
     if(bouton->surface == NULL || bouton->nameSurface == NULL)
     {
-        fprintf(stdout, "Les surfaces du bouton n'ont pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
+        fprintf(stderr, "Les surfaces du bouton n'ont pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
         return NULL;
     }
 
@@ -268,7 +264,7 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
         bouton->rect = SDL_malloc(sizeof(*bouton->rect));
         if(bouton->rect == NULL)
         {
-            fprintf(stdout, "Le rectangle du bouton n'a pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
+            fprintf(stderr, "Le rectangle du bouton n'a pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
             return NULL;
         }
         bouton->rect->x = x;
@@ -282,7 +278,7 @@ BTN_Button *BTN_CreateButtonWithSurface(Uint8 type, int w, int h, int d, int x, 
         bouton->nameRect = SDL_malloc(sizeof(*bouton->nameRect));
         if(bouton->nameRect == NULL)
         {
-            fprintf(stdout, "Le rectangle du nom du bouton n'a pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
+            fprintf(stderr, "Le rectangle du nom du bouton n'a pas pu etre creer :: BTN_CreateButtonWithSurface().\n");
             return NULL;
         }
         bouton->nameRect->w = bouton->nameSurface->w;
@@ -720,7 +716,6 @@ int BTN_RenderMouseMotion(BTN_Button *button, SDL_Event event, SDL_Renderer *ren
         SDL_RenderPresent(renderer);
         SDL_DestroyTexture(t);
         SDL_FreeSurface(button->surface);
-        SDL_free(button->surface);
         return 1;
     }
     else

@@ -1,3 +1,4 @@
+#include <SDL2/SDL_events.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -261,7 +262,7 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
             }
             break;
         }
-        SDL_RenderPresent(render);
+        //SDL_RenderPresent(render);
     }
 }
 

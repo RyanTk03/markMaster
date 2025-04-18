@@ -29,38 +29,29 @@ Fiche* charger_fiche(Liste_f *fiches, SDL_Renderer *render, char *fichier)
         char *nom = malloc((strlen(fichier)+5)*sizeof(char));
         strcpy(nom, fichier);
         strcat(nom, ".jpf");
-        free(fichier);
         fiche->nom = nom;
         fiche->render = render;
         fiche->texture = SDL_CreateTexture(fiche->render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, FICHE_W, FICHE_H);
         SDL_SetRenderTarget(fiche->render, fiche->texture);
-        {
-            //Remplir le rectangle de la fiche
-            SET_JPBLUE(fiche->render);
-            SDL_RenderFillRect(fiche->render, NULL);
-            SET_INDIGO(fiche->render);
-            SDL_RenderDrawRect(fiche->render, NULL);
-        }
-        {
-            //l'image de fond:
-            position.x = FICHE_W/2-LARGEUR_FOND/2;
-            position.y = FICHE_H/2-HAUTEUR_FOND/2;
-            position.w = LARGEUR_FOND;
-            position.h = HAUTEUR_FOND;
-            SDL_RenderCopy(fiche->render, texFond, NULL, &position);
-        }
-        {
-            //la tête du tableau:
-            position.x = TABLEAU_TETE_X;
-            position.y = TABLEAU_TETE_Y;
-            position.w = TABLEAU_TETE_W;
-            position.h = TABLEAU_TETE_H;
-            SDL_RenderCopy(fiche->render, texTableau, NULL, &position);
-        }
-        {
-            //le bouton plus
-            BTN_CopyButton(fiche->bouton_plus, fiche->render);
-        }
+        //Remplir le rectangle de la fiche
+        SET_JPBLUE(fiche->render);
+        SDL_RenderFillRect(fiche->render, NULL);
+        SET_INDIGO(fiche->render);
+        SDL_RenderDrawRect(fiche->render, NULL);
+        //l'image de fond:
+        position.x = FICHE_W/2-LARGEUR_FOND/2;
+        position.y = FICHE_H/2-HAUTEUR_FOND/2;
+        position.w = LARGEUR_FOND;
+        position.h = HAUTEUR_FOND;
+        SDL_RenderCopy(fiche->render, texFond, NULL, &position);
+        //la tête du tableau:
+        position.x = TABLEAU_TETE_X;
+        position.y = TABLEAU_TETE_Y;
+        position.w = TABLEAU_TETE_W;
+        position.h = TABLEAU_TETE_H;
+        SDL_RenderCopy(fiche->render, texTableau, NULL, &position);
+        //le bouton plus
+        BTN_CopyButton(fiche->bouton_plus, fiche->render);
         SDL_Point point[5];
         point[0].x = TABLEAU_TETE_X+TABLEAU_TETE_W+UL_X;
         point[0].y = 1;
@@ -92,13 +83,14 @@ Fiche* charger_fiche(Liste_f *fiches, SDL_Renderer *render, char *fichier)
         SDL_DestroyTexture(texFond);
         SDL_DestroyTexture(texTableau);
         if(fiche != NULL)
-            fprintf(stdout, "La fiche creer est NULL :: charger_fiche()");
+            fprintf(stderr, "La fiche creer est NULL :: charger_fiche()");
         else if(fiches->n >= MAX_FICHE)
-            fprintf(stdout, "Le nombre limite de fiche a ete atteint :: charger_fiche()");
+            fprintf(stderr, "Le nombre limite de fiche a ete atteint :: charger_fiche()");
         else
-            fprintf(stdout, "Impossible de charger la fiche :: charger_fiche()");
+            fprintf(stderr, "Impossible de charger la fiche :: charger_fiche()");
         return NULL;
     }
+    return NULL;
 }
 
 Return_Bool charger_donnes(char *fichier, Fiche *fiche)

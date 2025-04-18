@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "../inc/variables.h"
-#include "../inc/initialisation.h"
 #include "../inc/klcul_moy.h"
 
 void klcul_moyennes(Fiche *fiche)
@@ -34,7 +33,7 @@ void klcul_moyennes(Fiche *fiche)
 
 void moy_int(Matiere *matiere, SDL_Renderer *render)
 {
-    short int i = 0;/*
+    /*short int i = 0;
     for(i = 0; i < matiere->interrogations->max_note; i++)
     {
         if(matiere->interrogations->notes[i] >= 0)
@@ -59,7 +58,7 @@ void moy_int(Matiere *matiere, SDL_Renderer *render)
 
 void moy_dev(Matiere *matiere, SDL_Renderer *render)
 {
-    short int i = 0;/*
+    /*short int i = 0;
     for(i = 0; i < matiere->devoirs->max_note; i++)
     {
         if(matiere->devoirs->notes[i] >= 0)
@@ -146,11 +145,8 @@ void bilan(Fiche *fiche)
         fiche->list_matiere->bilan.moyInt += fiche->list_matiere->addrMatiere[i]->moy_int;
         fiche->list_matiere->bilan.totaux_coefficients += fiche->list_matiere->addrMatiere[i]->coefficient;
         i++;
-        printf("%d-test :: bilan()\n", i);
     }
-    printf("%d-test :: bilan()\n", i+1);
     fiche->list_matiere->bilan.moySur20 = fiche->list_matiere->bilan.moyCoef/fiche->list_matiere->bilan.totaux_coefficients;
-    printf("%d-test :: bilan()\n", i+2);
     if(fiche->list_matiere->bilan.moySur20 >= 9 && fiche->list_matiere->bilan.moySur20 < 12)
         mention = "Passable";
     else if(fiche->list_matiere->bilan.moySur20 >= 12 && fiche->list_matiere->bilan.moySur20 < 14)
@@ -166,7 +162,6 @@ void bilan(Fiche *fiche)
     else
         mention = "Insuffisant";
     fiche->list_matiere->bilan.mention = mention;
-    printf("%s\n", fiche->list_matiere->bilan.mention);
     afficherBilan(fiche);
 }
 
@@ -199,7 +194,6 @@ void afficherBilan(Fiche *fiche)
 
     TTF_SetFontStyle(bilanFont, TTF_STYLE_NORMAL);
     rectTitre.x = BILAN_X+BILAN_TITRE_DECALAGE_X;
-    printf("bilan ok\n");
     /*Moyenne interrogation*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     surTitre = TTF_RenderText_Blended(bilanFont, "Moyenne Interrogations :", noire);
@@ -221,7 +215,6 @@ void afficherBilan(Fiche *fiche)
     SDL_RenderCopy(fiche->render, texMoyenne, NULL, &rectMoyenne);
     SDL_FreeSurface(surMoyenne);
     SDL_DestroyTexture(texMoyenne);
-    printf("moyenne interro ok\n");
     /*Moyenne devoir*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     surTitre = TTF_RenderText_Blended(bilanFont, "Moyenne Devoirs :", noire);
@@ -243,7 +236,6 @@ void afficherBilan(Fiche *fiche)
     SDL_RenderCopy(fiche->render, texMoyenne, NULL, &rectMoyenne);
     SDL_FreeSurface(surMoyenne);
     SDL_DestroyTexture(texMoyenne);
-    printf("moyenne devoir ok\n");
     /*Moyenne Trimestrielle*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     TTF_SetFontStyle(bilanFont, TTF_STYLE_BOLD);
@@ -259,7 +251,6 @@ void afficherBilan(Fiche *fiche)
 
     TTF_SetFontStyle(bilanFont, TTF_STYLE_NORMAL);
     rectTitre.x = BILAN_X+BILAN_TITRE_DECALAGE_X;
-    printf("moyenne trimestrielle ok\n");
     /*Moyenne /20*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     surTitre = TTF_RenderText_Blended(bilanFont, "Moyenne Coefficié :", noire);
@@ -281,7 +272,6 @@ void afficherBilan(Fiche *fiche)
     SDL_RenderCopy(fiche->render, texMoyenne, NULL, &rectMoyenne);
     SDL_FreeSurface(surMoyenne);
     SDL_DestroyTexture(texMoyenne);
-    printf("moyenne /20 ok\n");
     /*Moyenne Coefficie*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     surTitre = TTF_RenderText_Blended(bilanFont, "Moyenne /20 :", noire);
@@ -303,7 +293,6 @@ void afficherBilan(Fiche *fiche)
     SDL_RenderCopy(fiche->render, texMoyenne, NULL, &rectMoyenne);
     SDL_FreeSurface(surMoyenne);
     SDL_DestroyTexture(texMoyenne);
-    printf("moyenne Coefficie ok\n");
     /*Mention*/
     TTF_SetFontStyle(bilanFont, TTF_STYLE_UNDERLINE);
     surTitre = TTF_RenderText_Blended(bilanFont, "Mention :", noire);
@@ -324,6 +313,5 @@ void afficherBilan(Fiche *fiche)
     SDL_RenderCopy(fiche->render, texMoyenne, NULL, &rectMoyenne);
     SDL_FreeSurface(surMoyenne);
     SDL_DestroyTexture(texMoyenne);
-    printf("mention ok\n");
     TTF_CloseFont(bilanFont);
 }
