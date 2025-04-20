@@ -14,7 +14,7 @@ Matiere* fenetre_nouvelleMatiere(Fiche *fiche) //Fini
 {
     if(fiche == NULL)
     {
-        fprintf(stdout, "le message qui sera renvoye signifie que la fiche sur laquelle on ajoute une nouvelle matiere n'existe pas :: fenetre_nouvelleMatiere().\n");
+        fprintf(stderr, "La fiche sur laquelle on ajoute une nouvelle matiere n'existe pas :: fenetre_nouvelleMatiere().\n");
         return NULL;
     }
     Matiere *matiere = NULL;
@@ -40,7 +40,6 @@ Matiere* fenetre_nouvelleMatiere(Fiche *fiche) //Fini
     SDL_Rect texteRect;
     SDL_CreateWindowAndRenderer(NEW_SUBJECT_WINDOW_W, NEW_SUBJECT_WINDOW_H, SDL_WINDOW_BORDERLESS, &fenetre, &render);
     int w, h;
-    //______________________________________________________________________________________//fin des créations  et initialisations
     SDL_SetRenderDrawColor(render, 255, 255, 50, 255);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);

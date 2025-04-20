@@ -279,7 +279,7 @@ Return_Bool mouseMoveInVolet(Fiche *fiche, SDL_Event event)
         SDL_SetSurfaceAlphaMod(s, 80);
         SDL_Texture *t = SDL_CreateTextureFromSurface(fiche->render, s);
         SDL_RenderCopy(fiche->render, t, NULL, fiche->volet_titre->rectangle);
-        SDL_RenderPresent(fiche->render);
+        // SDL_RenderPresent(fiche->render);
         SDL_FreeSurface(s);
         SDL_DestroyTexture(t);
         return ok;
@@ -290,7 +290,7 @@ Return_Bool mouseMoveInVolet(Fiche *fiche, SDL_Event event)
             SDL_RenderCopy(fiche->render, fiche->volet_titre->textureActu, NULL, fiche->volet_titre->rectangle);
         else
             SDL_RenderCopy(fiche->render, fiche->volet_titre->texture, NULL, fiche->volet_titre->rectangle);
-        SDL_RenderPresent(fiche->render);
+        // SDL_RenderPresent(fiche->render);
         return error;
     }
 }

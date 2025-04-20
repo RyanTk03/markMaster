@@ -1,4 +1,5 @@
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_render.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +16,7 @@
 #include "../inc/fenetres.h"
 #include "../inc/lireNote.h"
 #include "../inc/charge.h"
+#include "../inc/renderer.h"
 
 void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, SDL_Renderer *render, char **argv)
 {
@@ -22,8 +24,10 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
     SDL_Event ficheEvent;
     int continuer = 1;
     int m = 0, f = 0;
-    Fiche* ficheActel = NULL;
+    Fiche* ficheActuelle = NULL;
     FILE *lastRoot = fopen("appData/lastR.jpfdat", "rb");
+    TTF_Font *font = TTF_OpenFont("appData/fonts/taile.ttf", 14);
+
     if(lastRoot == NULL)
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, NULL, "Repertoire des donnees introuvable.", NULL);
@@ -35,12 +39,12 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
         fscanf(lastRoot, "%d", &nf);
         for(int i = 0; i < nf; i++)
         {
-            if(ficheActel != NULL)
-                ficheActel->statut = arriere_plan;
+            if(ficheActuelle != NULL)
+                ficheActuelle->statut = arriere_plan;
             fscanf(lastRoot, "%s", lastFiche);
             if(lastFiche != NULL)
             {
-                ficheActel = charger_fiche(listFiche, render, "test");
+                ficheActuelle = charger_fiche(listFiche, render, "test");
                 f++;
             }
         }
@@ -71,104 +75,58 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
             }
             continuer = 0;
             break;
-        case SDL_MOUSEMOTION:
-            //D'abord les évènement de la fenetre principale
-            if(BTN_RenderMouseMotion(outils->addMatiere, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->addFiche, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->suppFiche, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->suppMatiere, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->chargeFiche, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->saveFiche, winEvent, render)) {}
-            if(BTN_RenderMouseMotion(outils->klculBilan, winEvent, render)) {}
-            if(listFiche->addrFiche[0] != NULL)
-            {
-                if(mouseMoveInVolet(listFiche->addrFiche[0], winEvent)) {}
-                if(BTN_RenderMouseMotion(listFiche->addrFiche[0]->volet_titre->supp, winEvent, render)) {}
-            }
-            if(listFiche->addrFiche[1] != NULL)
-            {
-                if(mouseMoveInVolet(listFiche->addrFiche[1], winEvent)) {}
-                if(BTN_RenderMouseMotion(listFiche->addrFiche[1]->volet_titre->supp, winEvent, render)) {}
-            }
-            if(listFiche->addrFiche[2] != NULL)
-            {
-                if(mouseMoveInVolet(listFiche->addrFiche[2], winEvent)) {}
-                if(BTN_RenderMouseMotion(listFiche->addrFiche[2]->volet_titre->supp, winEvent, render)) {}
-            }
-            if(listFiche->addrFiche[3] != NULL)
-            {
-                if(mouseMoveInVolet(listFiche->addrFiche[3], winEvent)) {}
-                if(BTN_RenderMouseMotion(listFiche->addrFiche[3]->volet_titre->supp, winEvent, render)) {}
-            }
-            if(listFiche->addrFiche[4] != NULL)
-            {
-                if(mouseMoveInVolet(listFiche->addrFiche[4], winEvent)) {}
-                if(BTN_RenderMouseMotion(listFiche->addrFiche[4]->volet_titre->supp, winEvent, render)) {}
-            }
-            if(ficheActel != NULL)
-            {
-                if(winEvent.motion.x > FICHE_X && winEvent.motion.y > FICHE_Y) //Maintenant les éléments  de la fiche
-                {
-                    SDL_SetRenderTarget(render, ficheActel->texture);
-                    GetFicheEvent(winEvent, &ficheEvent);
-                    if(BTN_RenderMouseMotion(ficheActel->bouton_plus, ficheEvent, render)) {}
-                    SDL_SetRenderTarget(render, NULL);
-                    SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
-                }
-            }
-            break;
         case SDL_MOUSEBUTTONDOWN:
             if(winEvent.button.x > 0 && winEvent.button.y > 0 && winEvent.button.y < FICHE_Y) //D'abord les évènement de la fenetre principale
             {
                 if(BTN_RenderMouseClicDown(outils->addFiche, winEvent, render))
                 {
-                    if(ficheActel != NULL)
-                        ficheActel->statut = arriere_plan;
-                    ficheActel = AjouterFiche(listFiche, render);
+                    if(ficheActuelle != NULL)
+                        ficheActuelle->statut = arriere_plan;
+                    ficheActuelle = AjouterFiche(listFiche, render);
                     f++;
                 }
                 if(BTN_RenderMouseClicDown(outils->addMatiere, winEvent, render))
                 {
-                    if(AjouterMatiere(ficheActel) == ok)
+                    if(AjouterMatiere(ficheActuelle) == ok)
                         m++;
                 }
                 if(BTN_RenderMouseClicDown(outils->suppFiche, winEvent, render))
                 {
-                    DetruireFiche(listFiche, ficheActel);
+                    DetruireFiche(listFiche, ficheActuelle);
                     f--;
                 }
                 if(BTN_RenderMouseClicDown(outils->suppMatiere, winEvent, render))
                 {
-                    fenetre_supprimerMatiere(ficheActel);
+                    fenetre_supprimerMatiere(ficheActuelle);
                     m--;
                 }
                 if(BTN_RenderMouseClicDown(outils->chargeFiche, winEvent, render))
                 {
-                    if(ficheActel != NULL)
-                        ficheActel->statut = arriere_plan;
-                    ficheActel = fenetre_chargerFiche(listFiche, render);
+                    if(ficheActuelle != NULL)
+                        ficheActuelle->statut = arriere_plan;
+                    ficheActuelle = fenetre_chargerFiche(listFiche, render);
                     f++;
                 }
                 if(BTN_RenderMouseClicDown(outils->saveFiche, winEvent, render))
                 {
-                    enregistrer_fiche(ficheActel, argv[0]);
+                    enregistrer_fiche(ficheActuelle, argv[0]);
                 }
                 if(BTN_RenderMouseClicDown(outils->klculBilan, winEvent, render))
                 {
-                    klcul_moyennes(ficheActel);
+                    klcul_moyennes(ficheActuelle);
                 }
                 if(listFiche->addrFiche[0] != NULL)
                 {
                     if(BTN_MOUSE_CLIC_ON_RECT(listFiche->addrFiche[0]->volet_titre->rectangle, winEvent))
                     {
-                        ficheActel->statut = arriere_plan;
-                        ficheActel = listFiche->addrFiche[0];
-                        ficheActel->statut = actuelle;
-                        SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
+                        ficheActuelle->statut = arriere_plan;
+                        ficheActuelle = listFiche->addrFiche[0];
+                        ficheActuelle->statut = actuelle;
+                        SDL_RenderCopy(ficheActuelle->render, ficheActuelle->texture, NULL, &ficheActuelle->surface_rect);
                     }
                     if(BTN_RenderMouseClicDown(listFiche->addrFiche[0]->volet_titre->supp, winEvent, render))
                     {
-                        ficheActel = DetruireFiche(listFiche, listFiche->addrFiche[0]);
+                        ficheActuelle = DetruireFiche(listFiche, listFiche->addrFiche[0]);
                         f--;
                     }
                 }
@@ -176,14 +134,14 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
                 {
                     if(BTN_MOUSE_CLIC_ON_RECT(listFiche->addrFiche[1]->volet_titre->rectangle, winEvent))
                     {
-                        ficheActel->statut = arriere_plan;
-                        ficheActel = listFiche->addrFiche[1];
-                        ficheActel->statut = actuelle;
-                        SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
+                        ficheActuelle->statut = arriere_plan;
+                        ficheActuelle = listFiche->addrFiche[1];
+                        ficheActuelle->statut = actuelle;
+                        SDL_RenderCopy(ficheActuelle->render, ficheActuelle->texture, NULL, &ficheActuelle->surface_rect);
                     }
                     if(BTN_RenderMouseClicDown(listFiche->addrFiche[1]->volet_titre->supp, winEvent, render))
                     {
-                        ficheActel = DetruireFiche(listFiche, listFiche->addrFiche[1]);
+                        ficheActuelle = DetruireFiche(listFiche, listFiche->addrFiche[1]);
                         f--;
                     }
                 }
@@ -191,14 +149,14 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
                 {
                     if(BTN_MOUSE_CLIC_ON_RECT(listFiche->addrFiche[2]->volet_titre->rectangle, winEvent))
                     {
-                        ficheActel->statut = arriere_plan;
-                        ficheActel = listFiche->addrFiche[2];
-                        ficheActel->statut = actuelle;
-                        SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
+                        ficheActuelle->statut = arriere_plan;
+                        ficheActuelle = listFiche->addrFiche[2];
+                        ficheActuelle->statut = actuelle;
+                        SDL_RenderCopy(ficheActuelle->render, ficheActuelle->texture, NULL, &ficheActuelle->surface_rect);
                     }
                     if(BTN_RenderMouseClicDown(listFiche->addrFiche[2]->volet_titre->supp, winEvent, render))
                     {
-                        ficheActel = DetruireFiche(listFiche, listFiche->addrFiche[2]);
+                        ficheActuelle = DetruireFiche(listFiche, listFiche->addrFiche[2]);
                         f--;
                     }
                 }
@@ -206,14 +164,14 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
                 {
                     if(BTN_MOUSE_CLIC_ON_RECT(listFiche->addrFiche[3]->volet_titre->rectangle, winEvent))
                     {
-                        ficheActel->statut = arriere_plan;
-                        ficheActel = listFiche->addrFiche[3];
-                        ficheActel->statut = actuelle;
-                        SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
+                        ficheActuelle->statut = arriere_plan;
+                        ficheActuelle = listFiche->addrFiche[3];
+                        ficheActuelle->statut = actuelle;
+                        SDL_RenderCopy(ficheActuelle->render, ficheActuelle->texture, NULL, &ficheActuelle->surface_rect);
                     }
-                    if(BTN_RenderMouseClicDown(ficheActel->volet_titre->supp, winEvent, render))
+                    if(BTN_RenderMouseClicDown(ficheActuelle->volet_titre->supp, winEvent, render))
                     {
-                        ficheActel = DetruireFiche(listFiche, listFiche->addrFiche[3]);
+                        ficheActuelle = DetruireFiche(listFiche, listFiche->addrFiche[3]);
                         f--;
                     }
                 }
@@ -221,32 +179,32 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
                 {
                     if(BTN_MOUSE_CLIC_ON_RECT(listFiche->addrFiche[4]->volet_titre->rectangle, winEvent))
                     {
-                        ficheActel->statut = arriere_plan;
-                        ficheActel = listFiche->addrFiche[4];
-                        ficheActel->statut = actuelle;
-                        SDL_RenderCopy(ficheActel->render, ficheActel->texture, NULL, &ficheActel->surface_rect);
+                        ficheActuelle->statut = arriere_plan;
+                        ficheActuelle = listFiche->addrFiche[4];
+                        ficheActuelle->statut = actuelle;
+                        SDL_RenderCopy(ficheActuelle->render, ficheActuelle->texture, NULL, &ficheActuelle->surface_rect);
                     }
                     if(BTN_RenderMouseClicDown(listFiche->addrFiche[4]->volet_titre->supp, winEvent, render))
                     {
-                        ficheActel = DetruireFiche(listFiche, listFiche->addrFiche[0]);
+                        ficheActuelle = DetruireFiche(listFiche, listFiche->addrFiche[0]);
                         f--;
                     }
                 }
             }
             else  //Maintenant les éléments  de la fiche
             {
-                if(ficheActel != NULL)
+                if(ficheActuelle != NULL)
                 {
-                    SDL_SetRenderTarget(render, ficheActel->texture);
+                    SDL_SetRenderTarget(render, ficheActuelle->texture);
                     GetFicheEvent(winEvent, &ficheEvent);
-                    if(BTN_RenderMouseClicDown(ficheActel->bouton_plus, ficheEvent, render))
+                    if(BTN_RenderMouseClicDown(ficheActuelle->bouton_plus, ficheEvent, render))
                     {
-                        if(AjouterMatiere(ficheActel) == ok)
+                        if(AjouterMatiere(ficheActuelle) == ok)
                             m++;
                     }
                     else
                     {
-                        switch(SaisirNote(ficheActel, &ficheEvent))
+                        switch(SaisirNote(ficheActuelle, &ficheEvent))
                         {
                         case ok:
                             break;
@@ -262,8 +220,15 @@ void main_looping(Liste_f *listFiche, BoiteOutils *outils, SDL_Window *window, S
             }
             break;
         }
-        //SDL_RenderPresent(render);
+        SET_GREY(render);
+        SDL_RenderClear(render);
+        renderCredits(render, font);
+        renderOutils(outils, render, &winEvent);
+        renderFicheVolet(listFiche, &winEvent, render);
+        renderFiche(ficheActuelle, &winEvent, render);
+        SDL_RenderPresent(render);
     }
+    TTF_CloseFont(font);
 }
 
 void GetFicheEvent(SDL_Event winEvent, SDL_Event *ficheEvent)
@@ -274,3 +239,4 @@ void GetFicheEvent(SDL_Event winEvent, SDL_Event *ficheEvent)
     ficheEvent->motion.x = winEvent.motion.x - FICHE_X;
     ficheEvent->motion.y = winEvent.motion.y - FICHE_Y;
 }
+

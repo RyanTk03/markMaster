@@ -141,7 +141,7 @@ SDL_Rect *BTN_CopyButton(BTN_Button *button, SDL_Renderer *renderer)
     }
     SDL_SetRenderTarget(renderer, target);
     SDL_RenderCopy(renderer, button->texture, NULL, button->rect);
-    SDL_RenderPresent(renderer);
+    // SDL_RenderPresent(renderer);
     SDL_DestroyTexture(t);
     return button->rect;
 }
@@ -152,48 +152,39 @@ void BTN_FreeButton(BTN_Button *button)
     {
         if(button->surface != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation de la surface\n");
             if(button->texture == NULL)
                     SDL_FreeSurface(button->surface);
         }
         if(button->texture != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation de la texture\n");
             SDL_DestroyTexture(button->texture);
         }
         if(button->nameSurface != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation de la surface du nom\n");
             SDL_FreeSurface(button->nameSurface);
         }
         if(button->font != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation de la police\n");
             TTF_CloseFont(button->font);
         }
         if(button->name != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation du nom\n");
             free(button->name);
         }
         if(button->fontName != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation du nom de la police utilisee\n");
             free(button->fontName);
         }
         if(button->nameRect != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation du rectangle du nom\n");
             SDL_free(button->nameRect);
         }
         if(button->rect != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation du rectangle de la surface\n");
             SDL_free(button->rect);
         }
         if(button != NULL)
         {
-            fprintf(stderr, "BTN_FreeButton(): liberation de la memoire alloue pour le bouton\n");
             free(button);
         }
     }
@@ -700,7 +691,7 @@ int BTN_RenderMouseMotion(BTN_Button *button, SDL_Event event, SDL_Renderer *ren
             SDL_BlitSurface(s, NULL, button->surface, &r);
             t = SDL_CreateTextureFromSurface(renderer, button->surface);
             SDL_RenderCopy(renderer, t, NULL, button->rect);
-            SDL_RenderPresent(renderer);
+            // SDL_RenderPresent(renderer);
         }
         else
         {
@@ -713,7 +704,7 @@ int BTN_RenderMouseMotion(BTN_Button *button, SDL_Event event, SDL_Renderer *ren
         SDL_SetSurfaceAlphaMod(button->surface, button->effectColor.a);
         t = SDL_CreateTextureFromSurface(renderer, button->surface);
         SDL_RenderCopy(renderer, t, NULL, button->rect);
-        SDL_RenderPresent(renderer);
+        // SDL_RenderPresent(renderer);
         SDL_DestroyTexture(t);
         SDL_FreeSurface(button->surface);
         return 1;
@@ -721,7 +712,7 @@ int BTN_RenderMouseMotion(BTN_Button *button, SDL_Event event, SDL_Renderer *ren
     else
     {
         SDL_RenderCopy(renderer, button->texture, NULL, button->rect);
-        SDL_RenderPresent(renderer);
+        // SDL_RenderPresent(renderer);
         SDL_DestroyTexture(t);
         return 0;
     }
@@ -736,7 +727,7 @@ int BTN_RenderMouseClicDown(BTN_Button *button, SDL_Event event, SDL_Renderer *r
         if(button->type == BTN_DYNAMIC_BUTTON_FORM_A && button->type == BTN_DYNAMIC_BUTTON_FORM_B)
         {
             SDL_RenderCopy(renderer, button->texture, NULL, button->rect);
-            SDL_RenderPresent(renderer);
+            // SDL_RenderPresent(renderer);
         }
         return 1;
     }

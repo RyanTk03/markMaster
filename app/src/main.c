@@ -79,37 +79,6 @@ Si vous disposez de cette resolution veillez la selectionner\ndans les parametre
     pWinSur = SDL_GetWindowSurface(pWindow);
     if(pWindow != NULL && pRender != NULL) //Déroulement du programme
     {
-        SET_GREY(pRender);
-        SDL_RenderClear(pRender);
-        TTF_Font *editorFont = TTF_OpenFont("appData/fonts/taile.ttf", 14);
-        SDL_Rect userRect = {0, 0, LARGEUR_UTILISATEUR, OUTILS_Y-UL_Y};
-        SET_INDIGO(pRender);
-        SDL_RenderFillRect(pRender, &userRect);
-        char *userName = "Les Collèges Jean Piaget";
-        SDL_Surface *userSurface = TTF_RenderText_Blended(editorFont, userName, noire);
-        userRect.x = (LARGEUR_UTILISATEUR/2)-(userSurface->w);
-        userRect.y = (userRect.h/2)-(userSurface->h/2);
-        userRect.w = userSurface->w;
-        SDL_Texture *userTexture = SDL_CreateTextureFromSurface(pRender, userSurface);
-        SDL_RenderCopy(pRender, userTexture, NULL, &userRect);
-        SDL_FreeSurface(userSurface);
-        SDL_DestroyTexture(userTexture);
-        SDL_Rect editorRect = {0, FICHE_Y+FICHE_H, LARGEUR_UTILISATEUR, HAUTEUR_UTILISATEUR-(FICHE_Y+FICHE_H)};
-        SDL_SetRenderDrawColor(pRender, 255, 255, 0, 255);
-        SDL_RenderFillRect(pRender, &editorRect);
-        SDL_Surface *editorSurface = TTF_RenderText_Blended(editorFont, "Edité par TOKO Rayane", noire);
-        editorRect.w = editorSurface->w;
-        SDL_Texture *editorTexture = SDL_CreateTextureFromSurface(pRender, editorSurface);
-        SDL_RenderCopy(pRender, editorTexture, NULL, &editorRect);
-        SDL_FreeSurface(editorSurface);
-        editorSurface = TTF_RenderText_Blended(editorFont, "Contact : tkryan03@gmail.com", noire);
-        editorTexture = SDL_CreateTextureFromSurface(pRender, editorSurface);
-        editorRect.w = editorSurface->w;
-        editorRect.x = LARGEUR_UTILISATEUR - editorSurface->w-UL_X;
-        SDL_RenderCopy(pRender, editorTexture, NULL, &editorRect);
-        SDL_FreeSurface(editorSurface);
-        SDL_DestroyTexture(editorTexture);
-        SDL_RenderPresent(pRender);
         afficherOutils(pRender, pOutils);
         main_looping(plisteFiche, pOutils, pWindow, pRender, argv);
 
